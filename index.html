@@ -123,6 +123,90 @@
     width:60px; height:4px; background:var(--red); margin:18px auto 0; border-radius:2px;
   }
 
+  /* PRICE TABLE LAYOUT */
+  /* ─── Cabeçalho de tamanhos ─── */
+  .size-header{
+    display:grid;
+    grid-template-columns: 1fr repeat(4, 68px);
+    align-items:center;
+    background:#1a1a1a;
+    border:1px solid var(--line);
+    border-top:2px solid var(--red);
+    border-radius:2px 2px 0 0;
+    padding:8px 18px;
+    margin-bottom:1px;
+    gap:6px;
+  }
+  .size-header .sh-label{
+    font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase;
+    color:rgba(245,240,232,0.3); font-weight:600;
+  }
+  .size-header .sh-size{
+    text-align:center;
+    font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:rgba(245,240,232,0.4); font-weight:500;
+    line-height:1.4;
+  }
+  .size-header .sh-size strong{
+    display:block; font-family:'Anton'; font-size:0.82rem;
+    color:rgba(245,240,232,0.75); letter-spacing:0.04em;
+  }
+
+  /* ─── Item com preços ─── */
+  .menu-item{
+    display:grid;
+    grid-template-columns: 1fr repeat(4, 68px);
+    align-items:center;
+    background:var(--charcoal);
+    padding:13px 18px;
+    gap:6px;
+    border-bottom:1px solid var(--line);
+    transition:background .2s;
+  }
+  .menu-item:last-child{ border-bottom:none; }
+  .menu-item:hover{ background:#252525; }
+  .menu-item-info h4{
+    font-family:'Oswald'; font-weight:600; font-size:1.05rem;
+    text-transform:uppercase; letter-spacing:0.05em; color:var(--orange);
+    margin-bottom:1px;
+  }
+  .menu-item-info p{
+    font-size:0.62rem; color:rgba(245,240,232,0.28); font-weight:300; line-height:1.3;
+  }
+  .menu-price{
+    text-align:center;
+    font-family:'Oswald'; font-weight:500; font-size:0.82rem; color:var(--cream);
+    letter-spacing:0.02em;
+    align-self:start;
+    padding-top:3px;
+  }
+  .menu-price.zero{ color:rgba(245,240,232,0.2); }
+
+  /* ─── Wrapper da tabela ─── */
+  .price-table{
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 2px 2px;
+    overflow:hidden;
+    margin-bottom:0;
+  }
+
+  @media(max-width:600px){
+    .size-header{
+      grid-template-columns: 1fr repeat(4, 50px);
+      padding:8px 10px; gap:3px;
+    }
+    .size-header .sh-size strong{ font-size:0.72rem; }
+    .size-header .sh-size{ font-size:0.52rem; }
+    .menu-item{
+      grid-template-columns: 1fr repeat(4, 50px);
+      padding:11px 10px; gap:3px;
+    }
+    .menu-price{ font-size:0.72rem; padding-top:2px; }
+    .menu-item-info h4{ font-size:0.9rem; }
+    .menu-item-info p{ font-size:0.58rem; }
+  }
+
   /* MENU CATEGORY BLOCKS */
   .menu-cat{
     margin-bottom:64px;
@@ -280,105 +364,179 @@
     <div class="underline"></div>
   </div>
 
+  <!-- TRADICIONAIS -->
   <div class="menu-cat">
     <div class="menu-cat-title">
       <span class="dot dot-red"></span>
       <h3>Tradicionais</h3>
-      <span class="size">40cm</span>
     </div>
-    <div class="menu-grid">
+
+    <!-- Cabeçalho tamanhos — edite os preços aqui -->
+    <div class="size-header">
+      <span class="sh-label">Sabor</span>
+      <span class="sh-size"><strong>40cm</strong>Grande</span>
+      <span class="sh-size"><strong>35cm</strong>Médio</span>
+      <span class="sh-size"><strong>30cm</strong>Pequeno</span>
+      <span class="sh-size"><strong>25cm</strong>Mini</span>
+    </div>
+    <div class="price-table">
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Calabresa Acebolada</h4></div>
-        <p>Molho especial da casa, mussarela, calabresa fatiada, cebola e orégano.</p>
+        <div class="menu-item-info"><h4>Calabresa Acebolada</h4><p>Molho especial da casa, mussarela, calabresa fatiada, cebola e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Calabresa</h4></div>
-        <p>Molho especial da casa, mussarela, calabresa fatiada, cebola e orégano.</p>
+        <div class="menu-item-info"><h4>Calabresa</h4><p>Molho especial da casa, mussarela, calabresa fatiada, cebola e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Mussarela</h4></div>
-        <p>Molho especial, mussarela, azeitona verde e orégano.</p>
+        <div class="menu-item-info"><h4>Mussarela</h4><p>Molho especial, mussarela, azeitona verde e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Marguerita</h4></div>
-        <p>Molho especial, mussarela, tomate em rodelas, manjericão fresco e orégano.</p>
+        <div class="menu-item-info"><h4>Marguerita</h4><p>Molho especial, mussarela, tomate em rodelas, manjericão fresco e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Portuguesa</h4></div>
-        <p>Molho especial, mussarela, presunto, ovos cozidos, cebola, tomate, milho, azeitona e orégano.</p>
+        <div class="menu-item-info"><h4>Portuguesa</h4><p>Molho especial, mussarela, presunto, ovos cozidos, cebola, tomate, milho, azeitona e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Alho</h4></div>
-        <p>Molho especial, mussarela, alho torrado, azeitona e orégano.</p>
+        <div class="menu-item-info"><h4>Alho</h4><p>Molho especial, mussarela, alho torrado, azeitona e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Presunto</h4></div>
-        <p>Molho especial, mussarela, presunto, tomate cereja, azeitona verde e orégano.</p>
+        <div class="menu-item-info"><h4>Presunto</h4><p>Molho especial, mussarela, presunto, tomate cereja, azeitona verde e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Toscana</h4></div>
-        <p>Molho especial, calabresa ralada, parmesão, azeitona e orégano.</p>
+        <div class="menu-item-info"><h4>Toscana</h4><p>Molho especial, calabresa ralada, parmesão, azeitona e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
     </div>
   </div>
 
+  <!-- ESPECIAIS DA CASA -->
   <div class="menu-cat" id="especiais">
     <div class="menu-cat-title">
       <span class="dot dot-orange"></span>
       <h3>Especiais da Casa</h3>
-      <span class="size">40cm</span>
     </div>
-    <div class="menu-grid">
+    <div class="size-header">
+      <span class="sh-label">Sabor</span>
+      <span class="sh-size"><strong>40cm</strong>Grande</span>
+      <span class="sh-size"><strong>35cm</strong>Médio</span>
+      <span class="sh-size"><strong>30cm</strong>Pequeno</span>
+      <span class="sh-size"><strong>25cm</strong>Mini</span>
+    </div>
+    <div class="price-table">
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Frango com Catupiry</h4></div>
-        <p>Molho especial, mussarela, frango desfiado temperado, catupiry cremoso e orégano.</p>
+        <div class="menu-item-info"><h4>Frango com Catupiry</h4><p>Molho especial, mussarela, frango desfiado temperado, catupiry cremoso e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Frango com Cheddar</h4></div>
-        <p>Molho especial, mussarela, frango desfiado temperado, cheddar, azeitona e orégano.</p>
+        <div class="menu-item-info"><h4>Frango com Cheddar</h4><p>Molho especial, mussarela, frango desfiado temperado, cheddar, azeitona e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Calabresa com Catupiry</h4></div>
-        <p>Molho especial, mussarela, calabresa fatiada, catupiry e orégano.</p>
+        <div class="menu-item-info"><h4>Calabresa com Catupiry</h4><p>Molho especial, mussarela, calabresa fatiada, catupiry e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>4 Queijos</h4></div>
-        <p>Molho especial, mussarela, gorgonzola, parmesão, catupiry, azeitona preta e orégano.</p>
+        <div class="menu-item-info"><h4>4 Queijos</h4><p>Molho especial, mussarela, gorgonzola, parmesão, catupiry, azeitona preta e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Baiana</h4></div>
-        <p>Molho especial, mussarela, calabresa moída levemente picante, cebola e pimenta.</p>
+        <div class="menu-item-info"><h4>Baiana</h4><p>Molho especial, mussarela, calabresa moída levemente picante, cebola e pimenta.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
     </div>
   </div>
 
+  <!-- PREMIUM -->
   <div class="menu-cat" id="premium">
     <div class="menu-cat-title">
       <span class="dot dot-green"></span>
       <h3>Premium</h3>
-      <span class="size">40cm</span>
     </div>
-    <div class="menu-grid">
+    <div class="size-header">
+      <span class="sh-label">Sabor</span>
+      <span class="sh-size"><strong>40cm</strong>Grande</span>
+      <span class="sh-size"><strong>35cm</strong>Médio</span>
+      <span class="sh-size"><strong>30cm</strong>Pequeno</span>
+      <span class="sh-size"><strong>25cm</strong>Mini</span>
+    </div>
+    <div class="price-table">
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Carne Seca com Catupiry</h4></div>
-        <p>Molho especial, mussarela, carne seca desfiada, catupiry cremoso e orégano.</p>
+        <div class="menu-item-info"><h4>Carne Seca com Catupiry</h4><p>Molho especial, mussarela, carne seca desfiada, catupiry cremoso e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Camarão Especial</h4></div>
-        <p>Molho especial, mussarela e camarão temperado especial com orégano.</p>
+        <div class="menu-item-info"><h4>Camarão Especial</h4><p>Molho especial, mussarela e camarão temperado especial com orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Camarão com Cream Cheese</h4></div>
-        <p>Molho especial, mussarela, camarão, cream cheese, azeitona e orégano.</p>
+        <div class="menu-item-info"><h4>Camarão com Cream Cheese</h4><p>Molho especial, mussarela, camarão, cream cheese, azeitona e orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Pepperoni</h4></div>
-        <p>Molho especial, mussarela e pepperoni fatiado com orégano.</p>
+        <div class="menu-item-info"><h4>Pepperoni</h4><p>Molho especial, mussarela e pepperoni fatiado com orégano.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
     </div>
   </div>
-</section>
 
+</section>
 
 
 <section class="section" id="doces">
@@ -392,28 +550,49 @@
     <div class="menu-cat-title">
       <span class="dot dot-purple"></span>
       <h3>Doces</h3>
-      <span class="size">30cm</span>
     </div>
-    <div class="menu-grid">
+    <div class="size-header">
+      <span class="sh-label">Sabor</span>
+      <span class="sh-size"><strong>40cm</strong>Grande</span>
+      <span class="sh-size"><strong>35cm</strong>Médio</span>
+      <span class="sh-size"><strong>30cm</strong>Pequeno</span>
+      <span class="sh-size"><strong>25cm</strong>Mini</span>
+    </div>
+    <div class="price-table">
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Chocolate com M&M</h4></div>
-        <p>Chocolate ao leite derretido sobre massa leve e crocante, com M&M.</p>
+        <div class="menu-item-info"><h4>Chocolate com M&amp;M</h4><p>Chocolate ao leite derretido sobre massa leve e crocante, com M&amp;M.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Chocolate com Morango</h4></div>
-        <p>Chocolate ao leite com morangos frescos.</p>
+        <div class="menu-item-info"><h4>Chocolate com Morango</h4><p>Chocolate ao leite com morangos frescos.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Romeu e Julieta</h4></div>
-        <p>Mussarela com goiabada derretida.</p>
+        <div class="menu-item-info"><h4>Romeu e Julieta</h4><p>Mussarela com goiabada derretida.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Banana com Canela</h4></div>
-        <p>Banana fatiada, açúcar, canela e leite condensado.</p>
+        <div class="menu-item-info"><h4>Banana com Canela</h4><p>Banana fatiada, açúcar, canela e leite condensado.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
       <div class="menu-item">
-        <div class="menu-item-top"><h4>Prestígio</h4></div>
-        <p>Massa leve e crocante, chocolate ao leite derretido e coco ralado.</p>
+        <div class="menu-item-info"><h4>Prestígio</h4><p>Massa leve e crocante, chocolate ao leite derretido e coco ralado.</p></div>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
+        <span class="menu-price zero">R$00</span>
       </div>
     </div>
   </div>
