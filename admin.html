@@ -374,7 +374,7 @@ const TOKEN_KEY = "lf_token";
 
 function getCfg(){
   const d = localStorage.getItem(CFG_KEY);
-  const defaults = {owner:"eafpowerflow-gif",repo:"L-fornatta",branch:"main",file:"index.html"};
+  const defaults = {owner:"eafpowerflow-gif",repo:"Lafornatta",branch:"main",file:"index.html"};
   return d ? {...defaults,...JSON.parse(d)} : defaults;
 }
 function saveCfg(o){localStorage.setItem(CFG_KEY,JSON.stringify(o));}
