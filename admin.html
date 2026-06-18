@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — LÀ FORNATTA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&display=swap');
+:root{
+  --red:#C8102E;--red-dark:#8E0B20;--black:#141414;--charcoal:#1f1f1f;
+  --cream:#F5F0E8;--orange:#E8862E;--line:rgba(245,240,232,0.08);
+  --green:#2ECC71;--green-dark:#27AE60;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--cream);font-family:'Oswald',sans-serif;font-weight:300;min-height:100vh;}
+h1,h2,h3{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0.02em;}
+
+/* LOGIN */
+#screen-login{
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;
+}
+.login-box{
+  width:100%;max-width:380px;
+  background:var(--charcoal);border:1px solid var(--line);border-top:3px solid var(--red);
+  border-radius:4px;padding:36px 32px;
+}
+.login-box h1{font-size:1.6rem;margin-bottom:4px;}
+.login-box p{font-size:0.8rem;color:rgba(245,240,232,0.4);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:28px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.5);margin-bottom:6px;}
+.field input{
+  width:100%;padding:10px 14px;background:#141414;
+  border:1px solid rgba(245,240,232,0.12);border-radius:2px;
+  color:var(--cream);font-family:'Oswald';font-size:0.95rem;outline:none;
+}
+.field input:focus{border-color:var(--red);}
+.btn-full{
+  width:100%;padding:12px;background:var(--red);color:var(--cream);
+  border:none;border-radius:2px;font-family:'Oswald';font-size:0.9rem;
+  letter-spacing:0.12em;text-transform:uppercase;font-weight:600;cursor:pointer;
+  transition:background .2s;margin-top:8px;
+}
+.btn-full:hover{background:var(--red-dark);}
+.login-err{
+  color:#ff6b6b;font-size:0.8rem;margin-top:12px;text-align:center;
+  display:none;
+}
+.login-tip{
+  margin-top:20px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:0.72rem;color:rgba(245,240,232,0.3);line-height:1.6;
+}
+.login-tip a{color:var(--orange);text-decoration:none;}
+
+/* ADMIN LAYOUT */
+#screen-admin{display:none;}
+header.admin-header{
+  position:sticky;top:0;z-index:40;
+  background:rgba(20,20,20,0.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.admin-nav{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:12px;flex-wrap:wrap;
+}
+.brand-small{display:flex;align-items:center;gap:10px;}
+.brand-small span{font-family:'Anton';font-size:1.1rem;letter-spacing:0.08em;}
+.brand-small small{font-size:0.55rem;letter-spacing:0.35em;color:var(--orange);font-weight:600;display:block;}
+.nav-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.btn-sm{
+  padding:8px 18px;border-radius:2px;font-family:'Oswald';font-size:0.78rem;
+  letter-spacing:0.1em;text-transform:uppercase;font-weight:600;cursor:pointer;
+  border:none;transition:all .2s;
+}
+.btn-commit{background:var(--green);color:#fff;}
+.btn-commit:hover{background:var(--green-dark);}
+.btn-commit:disabled{background:#2a4a35;color:rgba(255,255,255,0.4);cursor:not-allowed;}
+.btn-secondary{background:transparent;border:1px solid rgba(245,240,232,0.2);color:var(--cream);}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+.btn-danger-sm{background:transparent;border:1px solid rgba(200,16,46,0.3);color:var(--red);padding:6px 14px;}
+.btn-danger-sm:hover{background:rgba(200,16,46,0.1);}
+
+.admin-main{max-width:1100px;margin:0 auto;padding:32px 24px 80px;}
+
+/* STATUS BAR */
+.status-bar{
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  background:var(--charcoal);border:1px solid var(--line);border-radius:2px;
+  margin-bottom:28px;font-size:0.8rem;
+}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-ok{background:var(--green);}
+.dot-warn{background:var(--orange);}
+.dot-err{background:var(--red);}
+.status-text{color:rgba(245,240,232,0.7);}
+.status-sub{color:rgba(245,240,232,0.3);font-size:0.72rem;margin-left:auto;}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:32px;overflow-x:auto;}
+.tab-btn{
+  padding:12px 22px;font-family:'Oswald';font-size:0.82rem;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:500;cursor:pointer;
+  background:transparent;border:none;color:rgba(245,240,232,0.4);
+  border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;
+}
+.tab-btn:hover{color:rgba(245,240,232,0.7);}
+.tab-btn.active{color:var(--cream);border-bottom-color:var(--red);}
+.tab-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:7px;vertical-align:2px;}
+
+/* TABLE */
+.table-header{
+  display:grid;grid-template-columns:1fr repeat(4,80px) 90px;
+  gap:4px;padding:8px 14px;
+  background:#1a1a1a;border:1px solid var(--line);border-bottom:none;border-radius:2px 2px 0 0;
+  font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.3);font-weight:600;
+}
+.table-header span{text-align:center;}
+.table-header span:first-child{text-align:left;}
+.price-table{border:1px solid var(--line);border-radius:0 0 2px 2px;overflow:hidden;}
+.menu-row{
+  display:grid;grid-template-columns:1fr repeat(4,80px) 90px;
+  gap:4px;padding:11px 14px;
+  background:var(--charcoal);border-bottom:1px solid var(--line);
+  align-items:center;transition:background .15s;
+}
+.menu-row:last-child{border-bottom:none;}
+.menu-row:hover{background:#252525;}
+.row-name{font-family:'Oswald';font-weight:600;font-size:0.95rem;color:var(--orange);letter-spacing:0.04em;}
+.row-desc{font-size:0.65rem;color:rgba(245,240,232,0.28);margin-top:1px;line-height:1.3;}
+.price-cell input{
+  width:100%;padding:5px 6px;text-align:center;
+  background:#141414;border:1px solid rgba(245,240,232,0.1);border-radius:2px;
+  color:var(--cream);font-family:'Oswald';font-size:0.82rem;outline:none;
+}
+.price-cell input:focus{border-color:var(--orange);}
+.price-cell input.zero{color:rgba(245,240,232,0.25);}
+.row-actions{display:flex;gap:6px;justify-content:center;}
+.btn-icon{
+  width:28px;height:28px;border-radius:2px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid var(--line);background:transparent;color:rgba(245,240,232,0.5);
+  font-size:0.85rem;transition:all .15s;
+}
+.btn-icon:hover.edit{border-color:var(--orange);color:var(--orange);}
+.btn-icon:hover.del{border-color:var(--red);color:var(--red);}
+
+/* ADD ROW BUTTON */
+.add-row-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:12px 14px;margin-top:8px;
+  background:transparent;border:1px dashed rgba(245,240,232,0.12);border-radius:2px;
+  color:rgba(245,240,232,0.4);font-family:'Oswald';font-size:0.82rem;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;
+}
+.add-row-btn:hover{border-color:var(--orange);color:var(--orange);}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.modal-box{
+  width:100%;max-width:460px;background:var(--charcoal);
+  border:1px solid var(--line);border-top:3px solid var(--orange);border-radius:4px;
+  padding:28px;
+}
+.modal-box h3{font-size:1.2rem;margin-bottom:20px;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{display:block;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.45);margin-bottom:5px;}
+.modal-field input,.modal-field textarea{
+  width:100%;padding:9px 12px;background:#141414;
+  border:1px solid rgba(245,240,232,0.12);border-radius:2px;
+  color:var(--cream);font-family:'Oswald';font-size:0.9rem;outline:none;
+}
+.modal-field input:focus,.modal-field textarea:focus{border-color:var(--orange);}
+.modal-field textarea{resize:vertical;min-height:72px;line-height:1.4;}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.btn-modal-cancel{
+  padding:9px 20px;background:transparent;border:1px solid rgba(245,240,232,0.15);
+  border-radius:2px;color:rgba(245,240,232,0.6);font-family:'Oswald';font-size:0.82rem;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+}
+.btn-modal-save{
+  padding:9px 24px;background:var(--orange);border:none;border-radius:2px;
+  color:var(--cream);font-family:'Oswald';font-size:0.82rem;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;
+}
+.btn-modal-save:hover{background:#d4741a;}
+
+/* COMMIT MODAL */
+.commit-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:110;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.commit-box{
+  width:100%;max-width:440px;background:var(--charcoal);
+  border:1px solid var(--line);border-top:3px solid var(--green);border-radius:4px;
+  padding:28px;text-align:center;
+}
+.commit-box h3{font-size:1.2rem;margin-bottom:8px;}
+.commit-box p{font-size:0.85rem;color:rgba(245,240,232,0.55);margin-bottom:24px;line-height:1.6;}
+.commit-progress{
+  width:100%;height:4px;background:rgba(245,240,232,0.08);border-radius:2px;overflow:hidden;margin-bottom:20px;
+}
+.commit-bar{height:100%;width:0%;background:var(--green);border-radius:2px;transition:width .4s;}
+.commit-status{font-size:0.78rem;color:rgba(245,240,232,0.5);margin-bottom:20px;min-height:20px;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--charcoal);border:1px solid var(--line);border-radius:2px;
+  padding:10px 20px;font-size:0.82rem;letter-spacing:0.05em;
+  color:var(--cream);opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;}
+
+/* UNSAVED BADGE */
+.unsaved-badge{
+  background:var(--orange);color:var(--black);border-radius:2px;
+  font-size:0.65rem;padding:2px 7px;font-weight:700;letter-spacing:0.1em;
+  display:none;
+}
+.unsaved-badge.show{display:inline-block;}
+
+/* SETTINGS PANEL */
+.settings-panel{
+  background:var(--charcoal);border:1px solid var(--line);border-radius:2px;padding:24px;
+  margin-bottom:28px;display:none;
+}
+.settings-panel.open{display:block;}
+.settings-panel h3{font-size:1rem;margin-bottom:16px;color:var(--orange);}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .table-header,.menu-row{grid-template-columns:1fr repeat(2,72px) 80px;}
+  .table-header span:nth-child(4),.table-header span:nth-child(5),
+  .menu-row .price-cell:nth-child(4),.menu-row .price-cell:nth-child(5){display:none;}
+  .admin-nav{padding:10px 16px;}
+  .admin-main{padding:20px 16px 80px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="screen-login">
+  <div class="login-box">
+    <h1>LÀ FORNATTA</h1>
+    <p>Painel administrativo</p>
+    <div class="field">
+      <label>Senha de acesso</label>
+      <input type="password" id="inp-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')tentarLogin()">
+    </div>
+    <div class="field" id="campo-token" style="display:none;">
+      <label>GitHub Token <a href="https://github.com/settings/tokens/new?scopes=repo&description=LàFornatta+Admin" target="_blank" style="color:var(--orange);font-size:0.68rem;">gerar token ↗</a></label>
+      <input type="password" id="inp-token" placeholder="ghp_xxxxxxxxxxxx" onkeydown="if(event.key==='Enter')tentarLogin()">
+    </div>
+    <button class="btn-full" onclick="tentarLogin()">Entrar</button>
+    <div class="login-err" id="login-err">Senha incorreta.</div>
+    <div class="login-tip">
+      Token GitHub necessário para salvar alterações no site.<br>
+      Escopo necessário: <strong>repo</strong> (Contents: write).
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ADMIN ═══════════════ -->
+<div id="screen-admin">
+  <header class="admin-header">
+    <div class="admin-nav">
+      <div class="brand-small">
+        <img src="logo.png" width="32" height="32" style="border-radius:50%;" alt="">
+        <div><span>LÀ FORNATTA</span><small>Admin</small></div>
+      </div>
+      <div class="nav-actions">
+        <span class="unsaved-badge" id="badge-unsaved">● Alterações não salvas</span>
+        <button class="btn-sm btn-secondary" onclick="toggleSettings()">⚙ Config</button>
+        <button class="btn-sm btn-commit" id="btn-commit" onclick="iniciarCommit()">↑ Publicar no site</button>
+        <button class="btn-sm btn-secondary" onclick="sair()">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-main">
+
+    <!-- Settings -->
+    <div class="settings-panel" id="settings-panel">
+      <h3>Configurações do repositório</h3>
+      <div class="settings-grid">
+        <div class="field">
+          <label>Dono do repositório (usuário GitHub)</label>
+          <input type="text" id="cfg-owner" placeholder="eafpowerflow-gif">
+        </div>
+        <div class="field">
+          <label>Nome do repositório</label>
+          <input type="text" id="cfg-repo" placeholder="L-fornatta">
+        </div>
+        <div class="field">
+          <label>Branch</label>
+          <input type="text" id="cfg-branch" placeholder="main">
+        </div>
+        <div class="field">
+          <label>Arquivo a editar</label>
+          <input type="text" id="cfg-file" placeholder="index.html">
+        </div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="btn-sm btn-commit" onclick="salvarConfig()">Salvar configurações</button>
+        <button class="btn-sm btn-secondary" onclick="toggleSettings()">Fechar</button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-bar" id="status-bar">
+      <span class="status-dot dot-warn" id="status-dot"></span>
+      <span class="status-text" id="status-text">Carregando cardápio do GitHub...</span>
+      <span class="status-sub" id="status-sub"></span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs"></div>
+
+    <!-- Table -->
+    <div id="table-area"></div>
+
+  </div>
+</div>
+
+<!-- Modal sabor -->
+<div class="modal-overlay" id="modal-sabor" style="display:none;" onclick="if(event.target===this)fecharModal()">
+  <div class="modal-box">
+    <h3 id="modal-titulo">Novo Sabor</h3>
+    <div class="modal-field">
+      <label>Nome do sabor</label>
+      <input type="text" id="m-nome" placeholder="Ex: Pepperoni">
+    </div>
+    <div class="modal-field">
+      <label>Ingredientes</label>
+      <textarea id="m-desc" placeholder="Molho especial, mussarela..."></textarea>
+    </div>
+    <div class="price-grid">
+      <div class="modal-field"><label>40cm Grande (R$)</label><input type="number" id="m-g" placeholder="0" min="0"></div>
+      <div class="modal-field"><label>35cm Médio (R$)</label><input type="number" id="m-m" placeholder="0" min="0"></div>
+      <div class="modal-field"><label>30cm Pequeno (R$)</label><input type="number" id="m-p" placeholder="0" min="0"></div>
+      <div class="modal-field"><label>25cm Mini (R$)</label><input type="number" id="m-mini" placeholder="0" min="0"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-modal-save" onclick="salvarSabor()">Salvar sabor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Commit modal -->
+<div class="commit-overlay" id="commit-overlay" style="display:none;">
+  <div class="commit-box">
+    <h3 id="commit-title">Publicando alterações</h3>
+    <p id="commit-desc">Enviando o cardápio atualizado para o GitHub.<br>O site será atualizado em até 30 segundos.</p>
+    <div class="commit-progress"><div class="commit-bar" id="commit-bar"></div></div>
+    <div class="commit-status" id="commit-status">Iniciando...</div>
+    <button class="btn-full" id="btn-commit-close" style="display:none;" onclick="document.getElementById('commit-overlay').style.display='none'">Fechar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════ CONFIGURAÇÃO ═══════
+const ADMIN_SENHA = "fornatta2026";
+
+const CFG_KEY = "lf_cfg";
+const TOKEN_KEY = "lf_token";
+
+function getCfg(){
+  const d = localStorage.getItem(CFG_KEY);
+  const defaults = {owner:"eafpowerflow-gif",repo:"L-fornatta",branch:"main",file:"index.html"};
+  return d ? {...defaults,...JSON.parse(d)} : defaults;
+}
+function saveCfg(o){localStorage.setItem(CFG_KEY,JSON.stringify(o));}
+
+// ═══════ CATEGORIAS ═══════
+const CATS = [
+  {id:"trad", label:"Tradicionais", color:"#C8102E"},
+  {id:"esp",  label:"Especiais",    color:"#E8862E"},
+  {id:"prem", label:"Premium",      color:"#5C9B5A"},
+  {id:"doce", label:"Doces",        color:"#8E5CB8"},
+];
+
+// Estado
+let cardapio = {trad:[],esp:[],prem:[],doce:[]};
+let activeTab = "trad";
+let editando = null; // {cat, idx} ou null
+let unsaved = false;
+let htmlOriginal = "";
+let htmlSha = "";
+let nextId = 1000;
+
+// ═══════ LOGIN ═══════
+function tentarLogin(){
+  const senha = document.getElementById("inp-senha").value;
+  if(senha !== ADMIN_SENHA){
+    document.getElementById("login-err").textContent = "Senha incorreta.";
+    document.getElementById("login-err").style.display = "block";
+    return;
+  }
+  // Mostrar campo token se não tiver salvo
+  const token = localStorage.getItem(TOKEN_KEY);
+  if(!token){
+    document.getElementById("campo-token").style.display = "block";
+    const t = document.getElementById("inp-token").value.trim();
+    if(!t){ document.getElementById("login-err").textContent = "Informe o GitHub Token."; document.getElementById("login-err").style.display="block"; return; }
+    localStorage.setItem(TOKEN_KEY, t);
+  }
+  document.getElementById("login-err").style.display = "none";
+  document.getElementById("screen-login").style.display = "none";
+  document.getElementById("screen-admin").style.display = "block";
+  preencherConfig();
+  carregarDoGitHub();
+}
+
+function sair(){
+  document.getElementById("screen-admin").style.display = "none";
+  document.getElementById("screen-login").style.display = "flex";
+  document.getElementById("inp-senha").value = "";
+}
+
+// ═══════ CONFIG ═══════
+function preencherConfig(){
+  const c = getCfg();
+  document.getElementById("cfg-owner").value = c.owner;
+  document.getElementById("cfg-repo").value = c.repo;
+  document.getElementById("cfg-branch").value = c.branch;
+  document.getElementById("cfg-file").value = c.file;
+}
+function salvarConfig(){
+  saveCfg({
+    owner: document.getElementById("cfg-owner").value.trim(),
+    repo:  document.getElementById("cfg-repo").value.trim(),
+    branch:document.getElementById("cfg-branch").value.trim(),
+    file:  document.getElementById("cfg-file").value.trim(),
+  });
+  toast("Configurações salvas. Recarregando...");
+  setTimeout(()=>carregarDoGitHub(),800);
+}
+function toggleSettings(){
+  document.getElementById("settings-panel").classList.toggle("open");
+}
+
+// ═══════ GITHUB API ═══════
+async function ghGet(path){
+  const cfg = getCfg();
+  const token = localStorage.getItem(TOKEN_KEY);
+  const r = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}?ref=${cfg.branch}`,{
+    headers:{Authorization:`Bearer ${token}`, Accept:"application/vnd.github+json"}
+  });
+  return r.json();
+}
+
+async function ghPut(path, content, sha, message){
+  const cfg = getCfg();
+  const token = localStorage.getItem(TOKEN_KEY);
+  const r = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`,{
+    method:"PUT",
+    headers:{Authorization:`Bearer ${token}`, Accept:"application/vnd.github+json","Content-Type":"application/json"},
+    body: JSON.stringify({message, content: btoa(unescape(encodeURIComponent(content))), sha, branch: cfg.branch})
+  });
+  return r.json();
+}
+
+// ═══════ CARREGAR HTML DO GITHUB ═══════
+async function carregarDoGitHub(){
+  setStatus("warn","Carregando cardápio do GitHub...","");
+  try {
+    const cfg = getCfg();
+    const data = await ghGet(cfg.file);
+    if(data.message){
+      setStatus("err","Erro ao carregar: "+data.message,"Verifique as configurações");
+      return;
+    }
+    htmlSha = data.sha;
+    htmlOriginal = decodeURIComponent(escape(atob(data.content.replace(/\n/g,""))));
+    cardapio = parseHtml(htmlOriginal);
+    setStatus("ok","Cardápio carregado com sucesso","Última sincronização: agora");
+    renderTabs();
+    renderTable();
+  } catch(e){
+    setStatus("err","Erro de conexão: "+e.message,"Verifique o token e as configurações");
+  }
+}
+
+// ═══════ PARSER DE HTML ═══════
+function parseHtml(html){
+  const result = {trad:[],esp:[],prem:[],doce:[]};
+  // Mapear seções pelas IDs e comentários do HTML
+  const catMap = [
+    {id:"trad", anchors:["id=\"tradicionais\"","<!-- TRADICIONAIS","<!-- Tradicionais","dot-red"]},
+    {id:"esp",  anchors:["id=\"especiais\"","<!-- ESPECIAIS","<!-- Especiais","dot-orange"]},
+    {id:"prem", anchors:["id=\"premium\"","<!-- PREMIUM","<!-- Premium","dot-green"]},
+    {id:"doce", anchors:["id=\"doces\"","<!-- DOCES","<!-- Doces","dot-purple"]},
+  ];
+
+  // Encontrar todos os menu-items com seus preços
+  const itemRegex = /<div class="menu-item">\s*<div class="menu-item-info"><h4>(.*?)<\/h4><p>(.*?)<\/p><\/div>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>\s*<\/div>/gs;
+
+  // Dividir o HTML pelas seções
+  const sections = [
+    {id:"trad", start: html.indexOf('id="tradicionais"'), end: html.indexOf('id="especiais"')},
+    {id:"esp",  start: html.indexOf('id="especiais"'),   end: html.indexOf('id="premium"')},
+    {id:"prem", start: html.indexOf('id="premium"'),     end: html.indexOf('id="doces"')},
+    {id:"doce", start: html.indexOf('id="doces"'),       end: html.length},
+  ];
+
+  for(const sec of sections){
+    if(sec.start === -1) continue;
+    const chunk = html.slice(sec.start, sec.end === -1 ? html.length : sec.end);
+    let m;
+    const re = /<div class="menu-item">\s*<div class="menu-item-info"><h4>(.*?)<\/h4><p>(.*?)<\/p><\/div>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>\s*<span[^>]*>(.*?)<\/span>/gs;
+    while((m = re.exec(chunk)) !== null){
+      result[sec.id].push({
+        id: nextId++,
+        nome: m[1].trim(),
+        desc: m[2].trim(),
+        g:    precoNum(m[3]),
+        m:    precoNum(m[4]),
+        p:    precoNum(m[5]),
+        mini: precoNum(m[6]),
+      });
+    }
+  }
+  return result;
+}
+
+function precoNum(s){
+  if(!s || s.includes("R$00") || s.includes("R$0")) return 0;
+  const n = parseFloat(s.replace(/[^\d.,]/g,"").replace(",","."));
+  return isNaN(n) ? 0 : n;
+}
+
+// ═══════ GERAR HTML ═══════
+function gerarHtmlAtualizado(){
+  let html = htmlOriginal;
+
+  const catSections = [
+    {id:"trad", start: html.indexOf('id="tradicionais"'), end: html.indexOf('id="especiais"')},
+    {id:"esp",  start: html.indexOf('id="especiais"'),    end: html.indexOf('id="premium"')},
+    {id:"prem", start: html.indexOf('id="premium"'),      end: html.indexOf('id="doces"')},
+    {id:"doce", start: html.indexOf('id="doces"'),        end: -1},
+  ];
+
+  // Reconstruir de trás pra frente para não afetar os índices
+  for(let i = catSections.length-1; i >= 0; i--){
+    const sec = catSections[i];
+    if(sec.start === -1) continue;
+    const endIdx = sec.end === -1 ? html.length : sec.end;
+    const chunk = html.slice(sec.start, endIdx);
+
+    // Substituir todos os menu-items desse chunk
+    const itemsHtml = cardapio[sec.id].map(item => `      <div class="menu-item">
+        <div class="menu-item-info"><h4>${item.nome}</h4><p>${item.desc}</p></div>
+        <span class="menu-price zero">${item.g > 0 ? 'R$ '+item.g : 'R$00'}</span>
+        <span class="menu-price zero">${item.m > 0 ? 'R$ '+item.m : 'R$00'}</span>
+        <span class="menu-price zero">${item.p > 0 ? 'R$ '+item.p : 'R$00'}</span>
+        <span class="menu-price zero">${item.mini > 0 ? 'R$ '+item.mini : 'R$00'}</span>
+      </div>`).join("\n");
+
+    // Substituir o bloco price-table dentro do chunk
+    const ptStart = chunk.indexOf('<div class="price-table">');
+    const ptEnd = chunk.indexOf('</div>\n\n  </div>', ptStart);
+    if(ptStart === -1) continue;
+
+    const novoChunk = chunk.slice(0, ptStart) +
+      '<div class="price-table">\n' + itemsHtml + '\n    </div>' +
+      chunk.slice(ptEnd + '</div>'.length);
+
+    html = html.slice(0, sec.start) + novoChunk + html.slice(endIdx);
+  }
+  return html;
+}
+
+// ═══════ COMMIT ═══════
+async function iniciarCommit(){
+  document.getElementById("commit-overlay").style.display = "flex";
+  document.getElementById("commit-title").textContent = "Publicando alterações";
+  document.getElementById("commit-desc").innerHTML = "Enviando cardápio atualizado para o GitHub.<br>O site será atualizado em até 30 segundos.";
+  document.getElementById("btn-commit-close").style.display = "none";
+  setCommitBar(10,"Gerando HTML...");
+  await sleep(300);
+
+  try {
+    const novoHtml = gerarHtmlAtualizado();
+    setCommitBar(35,"Conectando ao GitHub...");
+    await sleep(300);
+    setCommitBar(55,"Enviando arquivo...");
+    const cfg = getCfg();
+    const res = await ghPut(cfg.file, novoHtml, htmlSha, "Atualização do cardápio via painel admin");
+    setCommitBar(85,"Verificando...");
+    await sleep(400);
+
+    if(res.content){
+      htmlSha = res.content.sha;
+      htmlOriginal = novoHtml;
+      setCommitBar(100,"Publicado com sucesso! ✓");
+      document.getElementById("commit-title").textContent = "Publicado! ✓";
+      document.getElementById("commit-desc").innerHTML = "O site está sendo atualizado pelo Vercel.<br>Em até 30 segundos estará no ar.";
+      setUnsaved(false);
+      setStatus("ok","Cardápio publicado com sucesso","Agora mesmo");
+    } else {
+      throw new Error(res.message || "Erro desconhecido");
+    }
+  } catch(e){
+    setCommitBar(0,"Erro: "+e.message);
+    document.getElementById("commit-title").textContent = "Erro ao publicar";
+    document.getElementById("commit-desc").textContent = e.message;
+  }
+  document.getElementById("btn-commit-close").style.display = "block";
+}
+
+function setCommitBar(pct,msg){
+  document.getElementById("commit-bar").style.width = pct+"%";
+  document.getElementById("commit-status").textContent = msg;
+}
+
+// ═══════ RENDER ═══════
+function renderTabs(){
+  document.getElementById("tabs").innerHTML = CATS.map(c=>`
+    <button class="tab-btn ${activeTab===c.id?'active':''}" onclick="setTab('${c.id}')">
+      <span class="tab-dot" style="background:${c.color}"></span>${c.label} <span style="opacity:.4;font-size:.72rem;">(${cardapio[c.id].length})</span>
+    </button>
+  `).join("");
+}
+
+function setTab(id){activeTab=id;renderTabs();renderTable();}
+
+function renderTable(){
+  const items = cardapio[activeTab];
+  const html = `
+    <div class="table-header">
+      <span>Sabor</span>
+      <span>40cm</span><span>35cm</span><span>30cm</span><span>25cm</span>
+      <span>Ações</span>
+    </div>
+    <div class="price-table">
+      ${items.map((item,idx)=>`
+      <div class="menu-row">
+        <div>
+          <div class="row-name">${item.nome}</div>
+          <div class="row-desc">${item.desc}</div>
+        </div>
+        <div class="price-cell"><input type="number" value="${item.g||''}" placeholder="—" class="${!item.g?'zero':''}" onchange="updatePreco('${activeTab}',${idx},'g',this.value)" oninput="this.classList.toggle('zero',!this.value)"></div>
+        <div class="price-cell"><input type="number" value="${item.m||''}" placeholder="—" class="${!item.m?'zero':''}" onchange="updatePreco('${activeTab}',${idx},'m',this.value)" oninput="this.classList.toggle('zero',!this.value)"></div>
+        <div class="price-cell"><input type="number" value="${item.p||''}" placeholder="—" class="${!item.p?'zero':''}" onchange="updatePreco('${activeTab}',${idx},'p',this.value)" oninput="this.classList.toggle('zero',!this.value)"></div>
+        <div class="price-cell"><input type="number" value="${item.mini||''}" placeholder="—" class="${!item.mini?'zero':''}" onchange="updatePreco('${activeTab}',${idx},'mini',this.value)" oninput="this.classList.toggle('zero',!this.value)"></div>
+        <div class="row-actions">
+          <button class="btn-icon edit" title="Editar" onclick="abrirModal('${activeTab}',${idx})">✎</button>
+          <button class="btn-icon del"  title="Remover" onclick="removerItem('${activeTab}',${idx})">✕</button>
+        </div>
+      </div>`).join("")}
+    </div>
+    <button class="add-row-btn" onclick="abrirModal('${activeTab}',null)">+ Adicionar sabor em ${CATS.find(c=>c.id===activeTab).label}</button>
+  `;
+  document.getElementById("table-area").innerHTML = html;
+}
+
+function updatePreco(cat,idx,campo,val){
+  cardapio[cat][idx][campo] = parseFloat(val)||0;
+  setUnsaved(true);
+}
+
+// ═══════ MODAL ═══════
+function abrirModal(cat, idx){
+  editando = idx !== null ? {cat,idx} : null;
+  document.getElementById("modal-titulo").textContent = idx !== null ? "Editar Sabor" : "Novo Sabor";
+  if(idx !== null){
+    const item = cardapio[cat][idx];
+    document.getElementById("m-nome").value = item.nome;
+    document.getElementById("m-desc").value = item.desc;
+    document.getElementById("m-g").value = item.g||"";
+    document.getElementById("m-m").value = item.m||"";
+    document.getElementById("m-p").value = item.p||"";
+    document.getElementById("m-mini").value = item.mini||"";
+  } else {
+    ["m-nome","m-desc","m-g","m-m","m-p","m-mini"].forEach(id=>document.getElementById(id).value="");
+  }
+  document.getElementById("modal-sabor").style.display = "flex";
+  document.getElementById("m-nome").focus();
+}
+
+function fecharModal(){document.getElementById("modal-sabor").style.display="none";editando=null;}
+
+function salvarSabor(){
+  const nome = document.getElementById("m-nome").value.trim();
+  if(!nome){toast("Informe o nome do sabor.");return;}
+  const obj = {
+    id: editando ? cardapio[editando.cat][editando.idx].id : nextId++,
+    nome,
+    desc: document.getElementById("m-desc").value.trim(),
+    g:    parseFloat(document.getElementById("m-g").value)||0,
+    m:    parseFloat(document.getElementById("m-m").value)||0,
+    p:    parseFloat(document.getElementById("m-p").value)||0,
+    mini: parseFloat(document.getElementById("m-mini").value)||0,
+  };
+  if(editando){
+    cardapio[editando.cat][editando.idx] = obj;
+  } else {
+    cardapio[activeTab].push(obj);
+  }
+  fecharModal();
+  setUnsaved(true);
+  renderTabs();
+  renderTable();
+  toast(editando ? "Sabor atualizado." : "Sabor adicionado.");
+}
+
+function removerItem(cat,idx){
+  if(!confirm(`Remover "${cardapio[cat][idx].nome}"?`)) return;
+  cardapio[cat].splice(idx,1);
+  setUnsaved(true);
+  renderTabs();
+  renderTable();
+  toast("Sabor removido.");
+}
+
+// ═══════ UTILS ═══════
+function setStatus(type,text,sub){
+  const dot = document.getElementById("status-dot");
+  dot.className = "status-dot dot-"+type;
+  document.getElementById("status-text").textContent = text;
+  document.getElementById("status-sub").textContent = sub;
+}
+function setUnsaved(v){
+  unsaved = v;
+  document.getElementById("badge-unsaved").classList.toggle("show",v);
+  document.getElementById("btn-commit").disabled = !v;
+}
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove("show"),2500);
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// Init
+setUnsaved(false);
+
+// Se já tem token salvo, não exibir campo no login
+window.addEventListener("DOMContentLoaded",()=>{
+  if(localStorage.getItem(TOKEN_KEY)){
+    document.getElementById("campo-token").style.display="none";
+  }
+});
+</script>
+</body>
+</html>
