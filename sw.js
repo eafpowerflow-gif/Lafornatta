@@ -3,15 +3,13 @@
 // ════════════════════════════════════════
 const CACHE_NAME = "fornatta-admin-v1";
 
-// Recursos a cachear na instalação
 const PRECACHE_URLS = [
-  "./",
-  "./index.html",
+  "./admin.html",
   "./manifest.json",
   "https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@300;400;500;600;700&display=swap",
 ];
 
-// ── Instalar: pré-cachear shell da app ──
+// ── Instalar ──
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -22,7 +20,7 @@ self.addEventListener("install", event => {
   );
 });
 
-// ── Ativar: remover caches antigos ──
+// ── Ativar: limpar caches antigos ──
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -35,24 +33,24 @@ self.addEventListener("activate", event => {
   );
 });
 
-// ── Fetch: estratégia por tipo de recurso ──
+// ── Fetch ──
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
 
-  // Requisições Supabase: sempre network (dados em tempo real)
+  // Supabase: sempre network (dados ao vivo)
   if (url.hostname.includes("supabase.co")) {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return new Response(
+      fetch(event.request).catch(() =>
+        new Response(
           JSON.stringify({ error: "offline" }),
           { headers: { "Content-Type": "application/json" } }
-        );
-      })
+        )
+      )
     );
     return;
   }
 
-  // Fontes Google: cache-first com fallback
+  // Fontes Google: cache-first
   if (url.hostname.includes("fonts.g")) {
     event.respondWith(
       caches.match(event.request).then(cached => {
@@ -67,11 +65,11 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // Shell da app (HTML, manifest): network-first com fallback ao cache
+  // admin.html e manifest: network-first com fallback ao cache
   if (
     event.request.mode === "navigate" ||
-    url.pathname.endsWith(".html") ||
-    url.pathname.endsWith(".json")
+    url.pathname.endsWith("admin.html") ||
+    url.pathname.endsWith("manifest.json")
   ) {
     event.respondWith(
       fetch(event.request)
@@ -85,10 +83,10 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // Demais: cache-first
+  // Demais assets: cache-first
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
+    caches.match(event.request).then(cached =>
+      cached || fetch(event.request)
+    )
   );
 });
