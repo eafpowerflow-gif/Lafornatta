@@ -411,30 +411,33 @@ async function salvarSabor() {
   const nome = document.getElementById("m-nome").value.trim();
   if (!nome) { toast("Informe o nome do sabor.", "error"); return; }
 
+  // Capturar editando ANTES de fechar o modal (fecharModal zera a variável)
+  const modoEdicao = editando;
+  const itemId     = modoEdicao ? cardapio[modoEdicao.cat][modoEdicao.idx].id : null;
+
   const obj = {
-    categoria:  editando ? editando.cat : activeTab,
+    categoria:  modoEdicao ? modoEdicao.cat : activeTab,
     nome,
     descricao:  document.getElementById("m-desc").value.trim(),
     preco_g:    parseFloat(document.getElementById("m-g").value)    || 0,
     preco_m:    parseFloat(document.getElementById("m-m").value)    || 0,
     preco_p:    parseFloat(document.getElementById("m-p").value)    || 0,
     preco_mini: parseFloat(document.getElementById("m-mini").value) || 0,
-    ordem:      editando ? cardapio[editando.cat][editando.idx].ordem : cardapio[activeTab].length,
+    ordem:      modoEdicao ? cardapio[modoEdicao.cat][modoEdicao.idx].ordem : cardapio[activeTab].length,
   };
 
   fecharModal();
-  showSaving(editando ? "Atualizando sabor..." : "Adicionando sabor...");
+  showSaving(modoEdicao ? "Atualizando sabor..." : "Adicionando sabor...");
 
   try {
-    if (editando) {
-      const id = cardapio[editando.cat][editando.idx].id;
-      await sbUpdate(id, obj);
+    if (modoEdicao) {
+      await sbUpdate(itemId, obj);
     } else {
       await sbInsert(obj);
     }
     await carregarCardapio();
     hideSaving();
-    toast(editando ? "Sabor atualizado ✓" : "Sabor adicionado ✓", "success");
+    toast(modoEdicao ? "Sabor atualizado ✓" : "Sabor adicionado ✓", "success");
   } catch(e) {
     hideSaving();
     toast("Erro: " + e.message, "error");
