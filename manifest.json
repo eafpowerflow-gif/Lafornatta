@@ -1,0 +1,38 @@
+{
+  "name": "LÀ FORNATTA Admin",
+  "short_name": "Fornatta",
+  "description": "Painel administrativo do cardápio LÀ FORNATTA",
+  "start_url": "/admin/",
+  "scope": "/admin/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#141414",
+  "theme_color": "#141414",
+  "categories": ["business", "food"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tradicionais",
+      "url": "/admin/#trad",
+      "description": "Gerenciar pizzas tradicionais"
+    },
+    {
+      "name": "Especiais",
+      "url": "/admin/#esp",
+      "description": "Gerenciar pizzas especiais"
+    }
+  ]
+}
